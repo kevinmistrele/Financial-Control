@@ -1,0 +1,24 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Expense {
+  id          String    @id @default(uuid()) // Gera ID único automaticamente
+  description String                         // Nome do gasto (ex: "Almoço")
+  amount      Decimal @db.Decimal(10, 2)     // Valor monetário (ex: 25.50)
+  type        String                         // Tipo (ex: "Alimentação", "Transporte")
+  createdAt   DateTime @default(now())       // Serve como data do gasto e data de registro
+  updatedAt   DateTime @updatedAt            // Útil pra saber quando você editou algo
+
+  @@map("expenses")
+}
