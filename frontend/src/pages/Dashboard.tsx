@@ -1,5 +1,7 @@
-import {Header} from "@/components/dashboard/Header";
-import {CardsTracker} from "@/components/dashboard/CardsTracker";
+import {Header} from "@/components/dashboard/Header/Header";
+import {CardsTracker} from "@/components/dashboard/Cards/CardsTracker";
+import {CardsGraph} from "@/components/dashboard/Graphic/CardsGraph";
+import {CardsRecentTransactions} from "@/components/dashboard/Transactions/CardsRecentTransactions";
 
 export const Dashboard = () => {
     return(
@@ -10,6 +12,10 @@ export const Dashboard = () => {
                     <CardsTracker/>
                     <CardsTracker/>
                     <CardsTracker/>
+                </div>
+                <div className="grid grid-cols-2 gap-5 w-full">
+                    <CardsGraph/>
+                    <CardsRecentTransactions/>
                 </div>
 
             </div>

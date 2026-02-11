@@ -9,5 +9,5 @@ export class CreateExpenseDto {
     amount: number;
     @IsString()
     @IsNotEmpty()
-    type: string;
+    category: string;
 }

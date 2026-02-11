@@ -1,8 +1,17 @@
 import {Wallet} from "lucide-react";
 import {Button} from "@/components/ui/button";
+import {useState} from "react";
+import {ModalExpenses} from "@/components/dashboard/Header/modal/ModalExpenses";
 
 
 export const Header = () => {
+    const [modalToggle, setModalToggle] = useState(false);
+
+
+    const toggleModal = () =>{
+        setModalToggle(!modalToggle);
+    }
+
     return(
         <>
             <div className="flex-row justify-between w-full flex">
@@ -13,7 +22,12 @@ export const Header = () => {
                     <h1 className="text-3xl font-bold">Money Tracker</h1>
                 </div>
                 <div>
-                    <Button size="lg" variant="green">+ Add Expense</Button>
+                    <Button onClick={toggleModal} size="lg" variant="green">{!modalToggle ? "Add Expense" : "Adding Expense"}</Button>
+
+                    {modalToggle && (
+                        <ModalExpenses openModal={modalToggle} setOpenModal={setModalToggle}/>
+                    )}
+
                 </div>
 
             </div>
