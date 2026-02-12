@@ -11,6 +11,7 @@ import {ExpenseCategories} from "@/constants/Category-Constant";
 import {getYearsOptions} from "@/lib/date-config";
 import {ItemsCard} from "@/components/dashboard/Transactions/ItemsCard";
 import {TransactionContext} from "@/contexts/TransactionContext";
+import type {TransactionItemType} from "@/types/expense";
 
 export const TransactionsModal = ({openModal, setOpenModal}: ModalProps) => {
     const [month, setMonth] = useState("");
@@ -18,20 +19,22 @@ export const TransactionsModal = ({openModal, setOpenModal}: ModalProps) => {
     const [year, setYear] = useState("");
     const [category, setCategory] = useState("");
     const transactionContext = useContext(TransactionContext);
-    const transactionsList = transactionContext?.transactions;
+    const transactionsList = transactionContext?.transactions ?? [];
 
     if(!transactionContext) {
         console.error("TransactionContext is undefined");
         return null;
     }
 
+    const sortedTransactions: TransactionItemType[] = [...transactionsList].sort((a, b) => {
+        const dateA = new Date(a.date).getTime();
+        const dateB = new Date(b.date).getTime();
+        return newest ? dateB - dateA: dateA - dateB;
+    })
 
 
     const changeSort = () => {
-        if(transactionsList && transactionsList.length > 0){
-            const sortedTransactions = [...transactionsList].sort((a, b) => a.date - b.date);
-        }
-
+       setNewest(!newest);
     }
 
     const calendarMonths = Months
@@ -119,7 +122,7 @@ export const TransactionsModal = ({openModal, setOpenModal}: ModalProps) => {
                     </div>
                     <div className="flex flex-col items-center justify-center gap-3 mt-5 w-full">
                         <CardContent className=" p-0 w-full pb-2 gap-3 mb-3 flex flex-col mt-3 min-h-[300px]" >
-                            {transactionsList && transactionsList.length > 0?  transactionsList.map((transaction)=>
+                            {sortedTransactions ?  sortedTransactions.map((transaction)=>
                                 <ItemsCard
                                     transaction={transaction}
                                     removeButton={true}
