@@ -1,25 +1,16 @@
 import {Card, CardContent, CardHeader} from "@/components/ui/card";
-import { type TransactionItemType} from "@/types/expense";
 import {Button} from "@/components/ui/button";
 import {ListFilter} from "lucide-react";
-import {useState} from "react";
+import {useContext, useState} from "react";
 import {TransactionsModal} from "@/components/dashboard/Transactions/modal/Transactions-Modal";
 import {ItemsCard} from "@/components/dashboard/Transactions/ItemsCard";
-
-let transactionsList: TransactionItemType[] = [
-    { id: 1, description: "Grocery Shopping", amount: 75.50, date: "2024-06-10", category: "shopping" },
-    { id: 2, description: "Electricity Bill", amount: 120.00, date: "2024-06-09", category: "bills" },
-    { id: 3, description: "Restaurant", amount: 45.25, date: "2024-06-08", category: "food" },
-    { id: 4, description: "Online Subscription", amount: 15.99, date: "2024-06-07", category: "entertainment" },
-    { id: 5, description: "Gas Refill", amount: 60.00, date: "2024-06-06", category: "transportation" },
-]
-
+import {TransactionContext} from "@/contexts/TransactionContext";
 
 export const CardsRecentTransactions = () => {
 
     const [openModal, setOpenModal] = useState(false);
-    const [transactions, setTransactions] = useState<TransactionItemType[]> (transactionsList);
-
+    const transactions = useContext(TransactionContext)
+    const transactionsList = transactions?.transactions;
     const toggleModal = () => {
         setOpenModal(!openModal);
         console.log('openModal:', openModal);
@@ -37,12 +28,16 @@ export const CardsRecentTransactions = () => {
                     )}
                 </div>
             </CardHeader>
-            <CardContent className="pb-2 gap-3 mb-3 flex flex-col">
-                {transactions.map((transaction) =>
+            <CardContent className="pb-2 gap-3 mb-3 flex flex-col min-h-[200px]" >
+                {transactionsList.length > 0 ? transactionsList.map((transaction) =>
                     <ItemsCard
                         transaction={transaction}
                     />
-                    )}
+                    ):
+                    <div className="flex flex-1 justify-center items-center" >
+                        <p className="text-sm text-gray-400">No transactions found.</p>
+                    </div>
+                }
             </CardContent>
         </Card>
 
