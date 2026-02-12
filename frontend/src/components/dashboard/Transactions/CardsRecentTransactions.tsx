@@ -29,7 +29,7 @@ export const CardsRecentTransactions = () => {
                 </div>
             </CardHeader>
             <CardContent className="pb-2 gap-3 mb-3 flex flex-col min-h-[200px]" >
-                {transactionsList.length > 0 ? transactionsList.map((transaction) =>
+                {transactionsList && transactionsList.length > 0 ? transactionsList.map((transaction) =>
                     <ItemsCard
                         transaction={transaction}
                     />
