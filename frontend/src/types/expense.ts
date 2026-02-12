@@ -27,12 +27,15 @@ export type CategoryIconProps = {
     category: ExpenseCategory;
 }
 
-export type TransactionType = {
+export interface TransactionObjectType{
+    transaction?: TransactionItemType;
+}
+
+export interface TransactionItemType {
     id: number;
     description: string;
+    category: ExpenseCategory;
     amount: number;
-    iconCategory?: ExpenseCategory;
-    category: string;
     date: string;
 }
 
