@@ -15,19 +15,6 @@ export interface ItemsCardProps {
     onDelete?: (id: number) => void;
     onSave?: (id: number, description: string, amount: number, category: string) => void;
 }
-
-// Quando clicar em editar, o item selecionado deve trocar pra um formulario de edicao com os dados preenchidos mas podendo ser alterados, o primeiro campo é pra editar a descricao
-// o segundo campo é pra editar o valor, e o terceiro a categoria, e ao final um botao de salvar as alteracoes e um de cancelar.
-// Vamos criar um estado interno pra controlar se o item esta em modo de edicao ou nao.
-// Ao clicar em editar, o estado muda pra modo de edicao, e o componente renderiza os campos de formulario.
-// Ao clicar em salvar, o estado volta pra modo normal, e o componente renderiza os dados atualizados.
-// Ao clicar em cancelar, o estado volta pra modo normal, e o componente renderiza os dados originais.
-// Vamos criar um usestate pra controlar o modo de edicao, e outro pra controlar os dados editaveis.
-// para controlar os dados editaveis vamos criar tres estados: um pra descricao, outro pro valor, e outro pra categoria.
-// Vamos inicializar esses estados com os valores recebidos via props.
-// Ao clicar em salvar, vamos chamar uma funcao passada via props pra atualizar os dados no componente pai, passando os novos valores.
-// Ao clicar em cancelar, vamos resetar os estados dos dados editaveis pros valores originais recebidos via props.
-
 export const ItemsCard = ({transaction, removeButton, editButton, onSave, onDelete}: ItemsCardProps) => {
     const [editMode, setEditMode] = useState(false);
 
@@ -38,8 +25,9 @@ export const ItemsCard = ({transaction, removeButton, editButton, onSave, onDele
     }
 
     const removeItem = () => {
-        console.log("Chamando onDelete no filho", transaction.id)
-      transaction.id ? onDelete(transaction.id): console.error('Transaction ID is undefined');
+      if(transaction.id && onDelete) {
+          onDelete(transaction.id);
+      }
     }
 
     console.log("Props no filho:", onDelete)
