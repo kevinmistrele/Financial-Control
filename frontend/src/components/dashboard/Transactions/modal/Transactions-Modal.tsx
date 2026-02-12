@@ -3,29 +3,27 @@ import {Card, CardContent} from "@/components/ui/card";
 import {ArrowDownUp, ArrowUpDown, DollarSign, X} from "lucide-react";
 import { type ModalProps} from "@/components/dashboard/Header/modal/ModalExpenses";
 import {Label} from "@/components/ui/label";
-import {useState} from "react";
+import {useContext, useState} from "react";
 import {SelectComponent} from "@/components/ui/SelectComponent";
 import {Button} from "@/components/ui/button";
 import {Months} from "@/constants/Calendar-constant";
 import {ExpenseCategories} from "@/constants/Category-Constant";
 import {getYearsOptions} from "@/lib/date-config";
-import type {TransactionItemType} from "@/types/expense";
 import {ItemsCard} from "@/components/dashboard/Transactions/ItemsCard";
-
-const transactionsList: TransactionItemType[] = [
-    { id: 1, description: "Grocery Shopping", amount: 75.50, date: "2024-06-10", category: "shopping" },
-    { id: 2, description: "Electricity Bill", amount: 120.00, date: "2024-06-09", category: "bills" },
-    { id: 3, description: "Restaurant", amount: 45.25, date: "2024-06-08", category: "food" },
-    { id: 4, description: "Online Subscription", amount: 15.99, date: "2024-06-07", category: "entertainment" },
-    { id: 5, description: "Gas Refill", amount: 60.00, date: "2024-06-06", category: "transportation" },
-]
+import {TransactionContext} from "@/contexts/TransactionContext";
 
 export const TransactionsModal = ({openModal, setOpenModal}: ModalProps) => {
     const [month, setMonth] = useState("");
     const [newest, setNewest] = useState(true);
     const [year, setYear] = useState("");
     const [category, setCategory] = useState("");
-    const [transactions, setTransactions] = useState<TransactionItemType[]> (transactionsList);
+    const transactionContext = useContext(TransactionContext);
+    const transactionsList = transactionContext?.transactions;
+
+    if(!transactionContext) {
+        console.error("TransactionContext is undefined");
+        return null;
+    }
 
 
 
@@ -50,8 +48,11 @@ export const TransactionsModal = ({openModal, setOpenModal}: ModalProps) => {
     }
 
     const deleteTransaction = (id: number) => {
-        const updatedTransactions = transactions.filter((transaction) => transaction.id !== id)
-        setTransactions(updatedTransactions);
+        if(transactionsList){
+            transactionContext.onDelete(id);
+        }else{
+            console.error("Transaction deleted error: ", id);
+        }
     }
 
     const resetFilters = () => {
@@ -114,15 +115,19 @@ export const TransactionsModal = ({openModal, setOpenModal}: ModalProps) => {
                         </div>
                     </div>
                     <div className="flex flex-col items-center justify-center gap-3 mt-5 w-full">
-                        <CardContent className=" p-0 w-full pb-2 gap-3 mb-3 flex flex-col mt-3">
-                            {transactions.map((transaction)=>
+                        <CardContent className=" p-0 w-full pb-2 gap-3 mb-3 flex flex-col mt-3 min-h-[300px]" >
+                            {transactionsList && transactionsList.length > 0?  transactionsList.map((transaction)=>
                                 <ItemsCard
                                     transaction={transaction}
                                     removeButton={true}
                                     editButton={true}
                                     onDelete={deleteTransaction}
                                 />
-                             )}
+                             ):
+                            <div className="flex flex-1 justify-center items-center">
+                                <p className="text-sm text-gray-400">No transactions found.</p>
+                            </div>
+                        }
                         </CardContent>
                     </div>
 
