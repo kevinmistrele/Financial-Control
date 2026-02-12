@@ -28,7 +28,10 @@ export const TransactionsModal = ({openModal, setOpenModal}: ModalProps) => {
 
 
     const changeSort = () => {
-        setNewest(!newest);
+        if(transactionsList && transactionsList.length > 0){
+            const sortedTransactions = [...transactionsList].sort((a, b) => a.date - b.date);
+        }
+
     }
 
     const calendarMonths = Months

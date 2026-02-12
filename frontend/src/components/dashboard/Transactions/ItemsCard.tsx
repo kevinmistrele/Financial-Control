@@ -30,7 +30,6 @@ export const ItemsCard = ({transaction, removeButton, editButton, onSave, onDele
       }
     }
 
-    console.log("Props no filho:", onDelete)
 
     return (
         <>

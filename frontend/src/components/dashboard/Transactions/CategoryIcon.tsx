@@ -55,7 +55,6 @@ const IconsConfig = {
 
 
 export const CategoryIcon = ({category}: CategoryIconProps) => {
-    console.log(category);
     const categoryValue = IconsConfig[category] || IconsConfig.general;
     const IconBgColor = categoryValue.bgColor;
     const IconColor = categoryValue.color;

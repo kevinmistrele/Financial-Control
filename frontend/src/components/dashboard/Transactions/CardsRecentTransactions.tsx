@@ -13,7 +13,6 @@ export const CardsRecentTransactions = () => {
     const transactionsList = transactions?.transactions;
     const toggleModal = () => {
         setOpenModal(!openModal);
-        console.log('openModal:', openModal);
     }
 
 
