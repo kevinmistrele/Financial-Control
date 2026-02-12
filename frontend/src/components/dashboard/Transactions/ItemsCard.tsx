@@ -24,6 +24,17 @@ export const ItemsCard = ({transaction, removeButton, editButton, onSave, onDele
         setEditMode(!editMode);
     }
 
+    const submitItem = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+        const data = {
+            description: formData.get("description"),
+            amount: Number(formData.get("amount")),
+            category: formData.get("category") as string,
+        }
+        console.log(data)
+    }
+
     const removeItem = () => {
       if(transaction.id && onDelete) {
           onDelete(transaction.id);
@@ -37,7 +48,7 @@ export const ItemsCard = ({transaction, removeButton, editButton, onSave, onDele
                 <div key={transaction.id} className="bg-[#09090b80] w-full h-14 rounded-sm gap-3 flex flex-row hover:bg-[#09090b] justify-between items-center px-3">
                     <div className="flex flex-row justify-center items-center gap-5">
 
-                            <form className="w-full">
+                            <form onSubmit={submitItem} className="w-full">
                                 <FieldGroup className="flex flex-row items-center gap-2">
                                     <Field>
                                         <Input className="flex-grow" id="description" defaultValue={transaction.description}  name="description" />
@@ -46,12 +57,11 @@ export const ItemsCard = ({transaction, removeButton, editButton, onSave, onDele
                                         <Input id="amount" defaultValue={transaction.amount} type='number' name="amount" />
                                     </Field>
                                     <Field>
-                                        <SelectComponent defaultValue={transaction.category} options={categories}  label="Category" onValueChange={changeEditMode} />
+                                        <SelectComponent name="category" defaultValue={transaction.category} options={categories}  label="Category" onValueChange={changeEditMode} />
                                     </Field>
-                                    <Button variant={"green"}>Save</Button>
+                                    <Button variant={"green"} type="submit">Save</Button>
                                     <Button type={"button"} onClick={changeEditMode} variant={"outline"}>Cancel</Button>
                                 </FieldGroup>
-
                             </form>
                     </div>
                 </div>:
