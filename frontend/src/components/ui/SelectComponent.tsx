@@ -15,12 +15,13 @@ import {
         onValueChange: (value: string ) => void;
         newValue?: string|number;
         defaultValue?: string;
+        name?: string;
     }
 
-export const SelectComponent = ({options, placeholder, label, onValueChange, newValue, defaultValue}:CustomSelectProps ) => {
+export const SelectComponent = ({options, placeholder, label, onValueChange, newValue, defaultValue, name}:CustomSelectProps ) => {
         const safeValue = newValue?.toString() || "";
     return(
-        <Select onValueChange={onValueChange} value={safeValue}>
+        <Select onValueChange={onValueChange} value={safeValue} name={name}>
             <SelectTrigger>
                 <SelectValue placeholder={placeholder}></SelectValue>
             </SelectTrigger>
