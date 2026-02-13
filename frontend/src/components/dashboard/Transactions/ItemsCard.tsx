@@ -5,7 +5,7 @@ import {Field, FieldGroup} from "@/components/ui/field";
 import {Input} from "@/components/ui/input";
 import {SelectComponent} from "@/components/ui/SelectComponent";
 import {ExpenseCategories} from "@/constants/Category-Constant";
-import {CategoryIcon} from "@/components/dashboard/Transactions/CategoryIcon";
+import {IconComponent} from "@/components/dashboard/Transactions/IconComponent";
 import {type ExpenseCategory} from "@/types/expense";
 
 export interface ItemsCardProps {
@@ -13,7 +13,7 @@ export interface ItemsCardProps {
     removeButton?: boolean;
     editButton?: boolean;
     onDelete?: (id: number) => void;
-    onSave?: (id: number, description: string, amount: number, category: string) => void;
+    onSave?: ( data: {id: number, description: string, amount: number, category: string})=> void;
 }
 export const ItemsCard = ({transaction, removeButton, editButton, onSave, onDelete}: ItemsCardProps) => {
     const [editMode, setEditMode] = useState(false);
@@ -28,11 +28,15 @@ export const ItemsCard = ({transaction, removeButton, editButton, onSave, onDele
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
         const data = {
-            description: formData.get("description"),
+            id: transaction.id,
+            description: formData.get("description") as string,
             amount: Number(formData.get("amount")),
             category: formData.get("category") as string,
         }
-        console.log(data)
+        if(data){
+            onSave?.(data)
+        }
+        return null
     }
 
     const removeItem = () => {
@@ -57,7 +61,7 @@ export const ItemsCard = ({transaction, removeButton, editButton, onSave, onDele
                                         <Input id="amount" defaultValue={transaction.amount} type='number' name="amount" />
                                     </Field>
                                     <Field>
-                                        <SelectComponent name="category" defaultValue={transaction.category} options={categories}  label="Category" onValueChange={changeEditMode} />
+                                        <SelectComponent name="category" defaultValue={transaction.category} options={categories}  label="Category" />
                                     </Field>
                                     <Button variant={"green"} type="submit">Save</Button>
                                     <Button type={"button"} onClick={changeEditMode} variant={"outline"}>Cancel</Button>
@@ -67,7 +71,7 @@ export const ItemsCard = ({transaction, removeButton, editButton, onSave, onDele
                 </div>:
             <div key={transaction.id} className="bg-[#09090b80] w-full h-14 rounded-sm gap-3 flex flex-row hover:bg-[#09090b] justify-between items-center px-3">
                 <div className="flex flex-row justify-center items-center gap-5">
-                        <CategoryIcon category={transaction.category}/>
+                        <IconComponent isCategory={true} category={transaction.category}/>
                         <div className="flex flex-col justify-center items-start">
                             <h2 className="text-sm">{transaction.description}</h2>
                             <p className=" text-xs text-[#A1A1AA]">{transaction.date}</p>
