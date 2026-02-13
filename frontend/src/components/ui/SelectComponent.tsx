@@ -12,7 +12,7 @@ import {
         options: { id: number| string; value: string| number; label: string }[];
         placeholder?: string;
         label: string;
-        onValueChange: (value: string ) => void;
+        onValueChange?: (value: string ) => void;
         newValue?: string|number;
         defaultValue?: string;
         name?: string;
