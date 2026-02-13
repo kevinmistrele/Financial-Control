@@ -12,6 +12,7 @@ import {getYearsOptions} from "@/lib/date-config";
 import {ItemsCard} from "@/components/dashboard/Transactions/ItemsCard";
 import {TransactionContext} from "@/contexts/TransactionContext";
 import type {TransactionItemType} from "@/types/expense";
+import {data} from "autoprefixer";
 
 export const TransactionsModal = ({openModal, setOpenModal}: ModalProps) => {
     const [month, setMonth] = useState("");
@@ -59,6 +60,10 @@ export const TransactionsModal = ({openModal, setOpenModal}: ModalProps) => {
         }else{
             console.error("Transaction deleted error: ", id);
         }
+    }
+
+    const saveEditedTransaction  = (data:any)=> {
+        console.log(data);
     }
 
     const resetFilters = () => {
@@ -128,6 +133,7 @@ export const TransactionsModal = ({openModal, setOpenModal}: ModalProps) => {
                                     removeButton={true}
                                     editButton={true}
                                     onDelete={deleteTransaction}
+                                    onSave={saveEditedTransaction}
                                 />
                              ):
                             <div className="flex flex-1 justify-center items-center">
