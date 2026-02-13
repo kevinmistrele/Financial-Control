@@ -23,10 +23,6 @@ export type Months =
     "november"|
     "december";
 
-export type CategoryIconProps = {
-    category: ExpenseCategory;
-}
-
 export interface TransactionObjectType{
     transaction?: TransactionItemType;
 }
