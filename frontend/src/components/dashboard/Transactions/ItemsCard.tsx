@@ -35,6 +35,7 @@ export const ItemsCard = ({transaction, removeButton, editButton, onSave, onDele
         }
         if(data){
             onSave?.(data)
+            setEditMode(!editMode);
         }
         return null
     }
@@ -58,7 +59,7 @@ export const ItemsCard = ({transaction, removeButton, editButton, onSave, onDele
                                         <Input className="flex-grow" id="description" defaultValue={transaction.description}  name="description" />
                                     </Field>
                                     <Field>
-                                        <Input id="amount" defaultValue={transaction.amount} type='number' name="amount" />
+                                        <Input id="amount" defaultValue={transaction.amount} step="0.01" type='number' name="amount" />
                                     </Field>
                                     <Field>
                                         <SelectComponent name="category" defaultValue={transaction.category} options={categories}  label="Category" />
