@@ -3,7 +3,7 @@ import {Card, CardContent} from "@/components/ui/card";
 import {ArrowDownUp, ArrowUpDown, DollarSign, X} from "lucide-react";
 import {type ModalProps} from "@/components/dashboard/Header/modal/ModalExpenses";
 import {Label} from "@/components/ui/label";
-import {useContext, useState} from "react";
+import {useContext, useMemo, useState} from "react";
 import {SelectComponent} from "@/components/ui/SelectComponent";
 import {Button} from "@/components/ui/button";
 import {Months} from "@/constants/Calendar-constant";
@@ -14,31 +14,52 @@ import {TransactionContext} from "@/contexts/TransactionContext";
 import type {TransactionItemType} from "@/types/expense";
 
 export const TransactionsModal = ({openModal, setOpenModal}: ModalProps) => {
-    const [month, setMonth] = useState("");
     const [newest, setNewest] = useState(true);
-    const [year, setYear] = useState("");
-    const [category, setCategory] = useState("");
     const transactionContext = useContext(TransactionContext);
     const transactionsList = transactionContext?.transactions ?? [];
+    const [filters, setFilters] = useState({
+        month: "",
+        year: "",
+        category: "",
+    });
 
     if(!transactionContext) {
         console.error("TransactionContext is undefined");
         return null;
     }
 
-    const sortedTransactions: TransactionItemType[] = [...transactionsList].sort((a, b) => {
+    const handleFiltersChange = (key: keyof typeof filters, value: string) => {
+        setFilters((previousValue) => ({
+            ...previousValue,
+            [key]: value,
+        }));
+    };
+
+    const filteredTransactions = useMemo(() => {
+        return transactionsList.filter((transaction) => {
+            const transactionDate = new Date(transaction.date);
+            const transactionMonth = String(transactionDate.getMonth() + 1).padStart(2, "0");
+            const transactionYear = transactionDate.getFullYear().toString();
+
+            const matchMonth =
+                !filters.month || filters.month === transactionMonth;
+
+            const matchYear =
+                !filters.year || filters.year === transactionYear;
+
+            const matchCategory =
+                !filters.category || filters.category === transaction.category;
+
+            return matchMonth && matchYear && matchCategory;
+        });
+    }, [transactionsList, filters]);
+
+
+    const sortedTransactions: TransactionItemType[] = [...filteredTransactions].sort((a, b) => {
         const dateA = new Date(a.date).getTime();
         const dateB = new Date(b.date).getTime();
         return newest ? dateB - dateA: dateA - dateB;
     })
-
-
-    const filterTransactions = (event:string) => {
-        const TransactionsList: TransactionItemType[] = [...transactionsList]
-        return TransactionsList.filter((transaction) => {
-            return event === transaction.category;
-        })
-    }
 
 
     const changeSort = () => {
@@ -48,20 +69,6 @@ export const TransactionsModal = ({openModal, setOpenModal}: ModalProps) => {
     const calendarMonths = Months
     const calendarYears = getYearsOptions(5)
     const categories = ExpenseCategories;
-
-    const setMonthValue = (event:string) => {
-        setMonth(event);
-    }
-
-    const setYearsValue = (event:string) => {
-        setYear(event);
-    }
-
-    const setCategoryValue = (event:string) => {
-        setCategory(event);
-        filterTransactions(event)
-    }
-
 
 
     const deleteTransaction = (id: number) => {
@@ -80,11 +87,13 @@ export const TransactionsModal = ({openModal, setOpenModal}: ModalProps) => {
     }
 
     const resetFilters = () => {
-        setMonthValue("");
-        setYearsValue("");
-        setCategoryValue("");
+       setFilters({
+           month: "",
+           year: "",
+           category: "",
+       });
     }
-    const isFiltersActive = month !== "" || year !== "" || category !== "";
+    const isFiltersActive = filters.month !== "" || filters.year !== "" || filters.category !== "";
     return (
         <Dialog open={openModal} onOpenChange={setOpenModal}>
             <DialogContent className="max-w-2xl bg-[#0e0e11]">
@@ -112,15 +121,29 @@ export const TransactionsModal = ({openModal, setOpenModal}: ModalProps) => {
                         <div className="grid grid-cols-5 gap-5 items-center">
                             <div>
                                 <Label>Month</Label>
-                                <SelectComponent newValue={month} options={calendarMonths} placeholder="All" label="Month" onValueChange={setMonthValue}/>
+                                <SelectComponent
+                                    newValue={filters.month}
+                                    options={calendarMonths}
+                                    placeholder="All"
+                                    label="Month"
+                                    onValueChange={(value) => handleFiltersChange("month", value)}/>
                             </div>
                             <div>
                                 <Label>Year</Label>
-                                <SelectComponent newValue={year} options={calendarYears} placeholder="All" label="Month"  onValueChange={setYearsValue}/>
+                                <SelectComponent
+                                    newValue={filters.year}
+                                    options={calendarYears}
+                                    placeholder="All"
+                                    label="Month"
+                                    onValueChange={(value) => handleFiltersChange("year", value)}/>
                             </div>
                             <div>
                                 <Label>Category</Label>
-                                <SelectComponent newValue={category} options={categories} placeholder="All" label="Month" onValueChange={setCategoryValue}/>
+                                <SelectComponent newValue={filters.category}
+                                                 options={categories}
+                                                 placeholder="All"
+                                                 label="Month"
+                                                 onValueChange={(value) => handleFiltersChange("category", value)}/>
                             </div>
                             <div className="items-center m-0 pt-6">
                                 {newest? <Button variant={"green"} onClick={changeSort}><ArrowUpDown/>Newest</Button>
