@@ -9,19 +9,12 @@ export type ExpenseCategory =
     "shopping"|
     "general";
 
-export type Months =
-    "january"|
-    "february"|
-    "march"|
-    "april"|
-    "may"|
-    "june"|
-    "july"|
-    "august"|
-    "september"|
-    "october"|
-    "november"|
-    "december";
+
+export interface TransactionContextType {
+    transactions: TransactionItemType[];
+    onDelete: (id: number) => void;
+    onSave: (data: {id: number, description: string, amount: number, category: string}) => void;
+}
 
 export interface TransactionObjectType{
     transaction?: TransactionItemType;
@@ -58,7 +51,7 @@ export type expenseCategories = {
 
 export type MonthsType = {
     id: number;
-    value: Months;
+    value: string;
     label: string;
 };
 
