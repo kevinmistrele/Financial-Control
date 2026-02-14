@@ -18,10 +18,9 @@ import {
         name?: string;
     }
 
-export const SelectComponent = ({options, placeholder, label, onValueChange, newValue, defaultValue, name}:CustomSelectProps ) => {
-        const safeValue = newValue?.toString() || "";
+export const SelectComponent = ({options, placeholder, label, onValueChange, defaultValue, name}:CustomSelectProps ) => {
     return(
-        <Select onValueChange={onValueChange} value={safeValue} name={name}>
+        <Select onValueChange={onValueChange} defaultValue={defaultValue} name={name}>
             <SelectTrigger>
                 <SelectValue placeholder={placeholder}></SelectValue>
             </SelectTrigger>
