@@ -12,7 +12,6 @@ import {getYearsOptions} from "@/lib/date-config";
 import {ItemsCard} from "@/components/dashboard/Transactions/ItemsCard";
 import {TransactionContext} from "@/contexts/TransactionContext";
 import type {TransactionItemType} from "@/types/expense";
-import {data} from "autoprefixer";
 
 export const TransactionsModal = ({openModal, setOpenModal}: ModalProps) => {
     const [month, setMonth] = useState("");
@@ -63,6 +62,9 @@ export const TransactionsModal = ({openModal, setOpenModal}: ModalProps) => {
     }
 
     const saveEditedTransaction  = (data:any)=> {
+        if(transactionsList){
+            transactionContext.onSave(data)
+        }
         console.log(data);
     }
 
