@@ -1,7 +1,7 @@
 import {Dialog, DialogContent, DialogHeader, DialogTitle} from "@/components/ui/dialog";
 import {Card, CardContent} from "@/components/ui/card";
 import {ArrowDownUp, ArrowUpDown, DollarSign, X} from "lucide-react";
-import { type ModalProps} from "@/components/dashboard/Header/modal/ModalExpenses";
+import {type ModalProps} from "@/components/dashboard/Header/modal/ModalExpenses";
 import {Label} from "@/components/ui/label";
 import {useContext, useState} from "react";
 import {SelectComponent} from "@/components/ui/SelectComponent";
@@ -33,6 +33,14 @@ export const TransactionsModal = ({openModal, setOpenModal}: ModalProps) => {
     })
 
 
+    const filterTransactions = (event:string) => {
+        const TransactionsList: TransactionItemType[] = [...transactionsList]
+        return TransactionsList.filter((transaction) => {
+            return event === transaction.category;
+        })
+    }
+
+
     const changeSort = () => {
        setNewest(!newest);
     }
@@ -51,7 +59,10 @@ export const TransactionsModal = ({openModal, setOpenModal}: ModalProps) => {
 
     const setCategoryValue = (event:string) => {
         setCategory(event);
+        filterTransactions(event)
     }
+
+
 
     const deleteTransaction = (id: number) => {
         if(transactionsList){
@@ -109,7 +120,7 @@ export const TransactionsModal = ({openModal, setOpenModal}: ModalProps) => {
                             </div>
                             <div>
                                 <Label>Category</Label>
-                                <SelectComponent newValue={category} options={categories} placeholder="All" label="Month"  onValueChange={setCategoryValue}/>
+                                <SelectComponent newValue={category} options={categories} placeholder="All" label="Month" onValueChange={setCategoryValue}/>
                             </div>
                             <div className="items-center m-0 pt-6">
                                 {newest? <Button variant={"green"} onClick={changeSort}><ArrowUpDown/>Newest</Button>
