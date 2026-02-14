@@ -16,13 +16,14 @@ import {
         newValue?: string;
         defaultValue?: string;
         name?: string;
-        isresetedValues?: boolean;
+        isCreatingExpense?: boolean;
     }
 
 
 
-export const SelectComponent = ({options, placeholder, label, onValueChange, defaultValue, name, newValue}:CustomSelectProps ) => {
+export const SelectComponent = ({options, placeholder, label, onValueChange, defaultValue, name, newValue, isCreatingExpense}:CustomSelectProps ) => {
     return(
+
         <Select onValueChange={onValueChange} value={newValue} defaultValue={defaultValue} name={name}>
             <SelectTrigger>
                 <SelectValue placeholder={placeholder}></SelectValue>
