@@ -3,7 +3,7 @@ import {Field, FieldGroup} from "@/components/ui/field";
 import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
 import {Button} from "@/components/ui/button";
-import {type ChangeEvent, useState} from "react";
+import { useState} from "react";
 import {SelectComponent} from "@/components/ui/SelectComponent";
 import {ExpenseCategories} from "@/constants/Category-Constant";
 
@@ -15,35 +15,37 @@ export interface ModalProps {
 
 export const ModalExpenses = ({openModal, setOpenModal}: ModalProps) => {
 
-    const [description, setDescription] = useState("");
-    const [amount, setAmount] = useState("");
-    const [category, setCategory] = useState("");
+    const [expenseData, setExpenseData] = useState({
+        description: "",
+        amount: "",
+        category: "",
+    });
+
 
     const expenseCategories = ExpenseCategories;
 
-    const receiveObject = (event:ChangeEvent) => {
-        return event.target.value
+    const handleChange = (
+        key: keyof typeof expenseData,
+        value: string
+    ) => {
+        setExpenseData((prev) => ({
+            ...prev,
+            [key]: value,
+        }));
+    };
+
+    const submitExpense = () => {
+        if (!isFormUncomplete) {
+            //Chama o serviço de envio pra API
+        }else{
+            //gera o Erro
+        }
     }
 
-
-
-    const setDescriptionValue = (event:ChangeEvent) => {
-        setDescription(receiveObject(event))
-    }
-
-    const setAmountValue = (event:ChangeEvent) => {
-        setAmount(receiveObject(event))
-
-    }
-
-    const setCategoryValue = (event:string) => {
-        setCategory(event);
-    }
-
-
-    const isFormComplete = description.trim() === "" || amount.trim() === "" || category === "";    return (
+    const isFormUncomplete = expenseData.description.trim() !== "" && expenseData.amount.trim() !== "" && expenseData.category.trim() !== ""
+    return (
         <Dialog open={openModal} onOpenChange={setOpenModal}>
-            <form>
+            <form onSubmit={submitExpense}>
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>Add new Expense</DialogTitle>
@@ -51,19 +53,19 @@ export const ModalExpenses = ({openModal, setOpenModal}: ModalProps) => {
                     <FieldGroup>
                         <Field>
                             <Label htmlFor="description">Description</Label>
-                            <Input id="description" name="description" placeholder="Coffee at Starbucks" onChange={setDescriptionValue} />
+                            <Input id="description" name="description" placeholder="Coffee at Starbucks" onChange={(e) => {handleChange("description", e.target.value)}} />
                         </Field>
                         <Field>
                             <Label htmlFor="amount">Amount ($)</Label>
-                            <Input id="amount" type='number' name="amount" placeholder="0.00" onChange={setAmountValue} />
+                            <Input id="amount" type='number' name="amount" placeholder="0.00" onChange={(e) => {handleChange("amount", e.target.value)}} />
                         </Field>
                         <Field>
                             <Label htmlFor="category">Category</Label>
-                            <SelectComponent options={expenseCategories} placeholder="e.g Transport" label="Category" onValueChange={setCategoryValue}/>
+                            <SelectComponent options={expenseCategories} placeholder="e.g Transport" label="Category" onValueChange={(value) => handleChange("category", value)} />
                         </Field>
                     </FieldGroup>
                     <div className="flex justify-center">
-                        {!isFormComplete ?
+                        {isFormUncomplete ?
                             <Button size='wide' variant= 'green'>Add Expense</Button>
                             : ''
                         }
