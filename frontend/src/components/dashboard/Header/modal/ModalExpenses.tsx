@@ -36,10 +36,20 @@ export const ModalExpenses = ({openModal, setOpenModal}: ModalProps) => {
 
     const submitExpense = () => {
         if (!isFormUncomplete) {
-            //Chama o serviço de envio pra API
+            //Pegamos o expense data e chamamos o serviço de envio pra API
         }else{
             //gera o Erro
         }
+
+        resetExpenseData();
+    }
+
+    const resetExpenseData = () => {
+        setExpenseData({
+            description: "",
+            amount: "",
+            category: "",
+        })
     }
 
     const isFormUncomplete = expenseData.description.trim() !== "" && expenseData.amount.trim() !== "" && expenseData.category.trim() !== ""
