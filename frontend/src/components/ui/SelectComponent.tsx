@@ -13,14 +13,17 @@ import {
         placeholder?: string;
         label: string;
         onValueChange?: (value: string ) => void;
-        newValue?: string|number;
+        newValue?: string;
         defaultValue?: string;
         name?: string;
+        isresetedValues?: boolean;
     }
 
-export const SelectComponent = ({options, placeholder, label, onValueChange, defaultValue, name}:CustomSelectProps ) => {
+
+
+export const SelectComponent = ({options, placeholder, label, onValueChange, defaultValue, name, newValue}:CustomSelectProps ) => {
     return(
-        <Select onValueChange={onValueChange} defaultValue={defaultValue} name={name}>
+        <Select onValueChange={onValueChange} value={newValue} defaultValue={defaultValue} name={name}>
             <SelectTrigger>
                 <SelectValue placeholder={placeholder}></SelectValue>
             </SelectTrigger>

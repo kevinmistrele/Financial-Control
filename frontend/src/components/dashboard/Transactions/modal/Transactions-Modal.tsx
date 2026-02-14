@@ -73,7 +73,6 @@ export const TransactionsModal = ({openModal, setOpenModal}: ModalProps) => {
         setYearsValue("");
         setCategoryValue("");
     }
-
     const isFiltersActive = month !== "" || year !== "" || category !== "";
     return (
         <Dialog open={openModal} onOpenChange={setOpenModal}>
@@ -106,11 +105,11 @@ export const TransactionsModal = ({openModal, setOpenModal}: ModalProps) => {
                             </div>
                             <div>
                                 <Label>Year</Label>
-                                <SelectComponent newValue={year} options={calendarYears} placeholder="All" label="Month" onValueChange={setYearsValue}/>
+                                <SelectComponent newValue={year} options={calendarYears} placeholder="All" label="Month"  onValueChange={setYearsValue}/>
                             </div>
                             <div>
                                 <Label>Category</Label>
-                                <SelectComponent newValue={category} options={categories} placeholder="All" label="Month" onValueChange={setCategoryValue}/>
+                                <SelectComponent newValue={category} options={categories} placeholder="All" label="Month"  onValueChange={setCategoryValue}/>
                             </div>
                             <div className="items-center m-0 pt-6">
                                 {newest? <Button variant={"green"} onClick={changeSort}><ArrowUpDown/>Newest</Button>
