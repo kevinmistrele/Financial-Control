@@ -1,17 +1,17 @@
-import {type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent} from "@/components/ui/chart";
-import {Bar, BarChart, CartesianGrid, XAxis, YAxis} from "recharts";
-import {Card, CardContent, CardHeader} from "@/components/ui/card";
-import {Button} from "@/components/ui/button";
-import {cn} from "@/lib/utils";
-import {useState} from "react";
-
+import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { useState } from "react";
+import { resolvedColors } from "@/design-system";
 
 const chartConfig = {
-    amount:{
-        label: 'Spent',
-        color: "#14b8a5"
-    }
-} satisfies ChartConfig
+    amount: {
+        label: "Spent",
+        color: resolvedColors.accent,
+    },
+} satisfies ChartConfig;
 
 type DayRange = 7 | 15 | 30;
 
@@ -25,24 +25,22 @@ const dataExample = [
     { day: "Dom", amount: 4 },
 ];
 
-
-
 export function CardsGraph() {
     const [range, setRange] = useState<DayRange>(7);
 
-    const data = (data:DayRange) => {
-        setRange(data);
-        filterChart(data)
+    function selectRange(days: DayRange) {
+        setRange(days);
+        fetchChartData(days);
     }
 
-    const filterChart = (daySelect: DayRange) => {
-        //chamaremos a api passando o data filtered pra ela
+    function fetchChartData(_days: DayRange) {
+        // TODO: integrar com GET /expenses/dashboard-report?days=_days
     }
 
     return (
         <Card>
             <CardHeader>
-                <div className="bg-[#09090b80] flex flex-row justify-between">
+                <div className="bg-background/50 flex flex-row justify-between">
                     <h2>Daily Spending</h2>
                     <div className="flex gap-1 bg-background/50 rounded-lg p-0.5">
                         {([7, 15, 30] as DayRange[]).map((d) => (
@@ -50,7 +48,7 @@ export function CardsGraph() {
                                 key={d}
                                 variant="ghost"
                                 size="sm"
-                                onClick={() => data(d)}
+                                onClick={() => selectRange(d)}
                                 className={cn(
                                     "h-7 px-2.5 text-xs rounded-md",
                                     range === d
@@ -63,30 +61,29 @@ export function CardsGraph() {
                         ))}
                     </div>
                 </div>
-
             </CardHeader>
             <CardContent className="pb-2">
-                <div className=" w-full">
+                <div className="w-full">
                     <ChartContainer config={chartConfig}>
                         <BarChart data={dataExample} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
-                            <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="#2c2c30" />
-
+                            <CartesianGrid
+                                vertical={false}
+                                strokeDasharray="3 3"
+                                stroke={resolvedColors.border}
+                            />
                             <XAxis
                                 dataKey="day"
                                 axisLine={false}
                                 tickLine={false}
-                                tick={{ fill: '#a1a1aa', fontSize: 12 }}
+                                tick={{ fill: resolvedColors.mutedForeground, fontSize: 12 }}
                             />
-
                             <YAxis
                                 axisLine={false}
                                 tickLine={false}
-                                tick={{ fill: '#a1a1aa', fontSize: 12 }}
+                                tick={{ fill: resolvedColors.mutedForeground, fontSize: 12 }}
                                 tickFormatter={(value) => `$${value}`}
                             />
-
                             <ChartTooltip content={<ChartTooltipContent />} />
-
                             <Bar
                                 dataKey="amount"
                                 fill="var(--color-amount)"
@@ -97,6 +94,5 @@ export function CardsGraph() {
                 </div>
             </CardContent>
         </Card>
-    )
+    );
 }
-

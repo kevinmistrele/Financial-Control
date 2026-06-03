@@ -57,6 +57,15 @@ export default {
                     border: "hsl(var(--sidebar-border))",
                     ring: "hsl(var(--sidebar-ring))",
                 },
+                expense: {
+                    DEFAULT: "hsl(var(--destructive))",
+                    foreground: "hsl(var(--destructive-foreground))",
+                },
+                brand: {
+                    DEFAULT: "hsl(var(--accent))",
+                    subtle: "hsl(var(--accent) / 0.1)",
+                    foreground: "hsl(var(--accent-foreground))",
+                },
             },
             borderRadius: {
                 lg: "var(--radius)",
